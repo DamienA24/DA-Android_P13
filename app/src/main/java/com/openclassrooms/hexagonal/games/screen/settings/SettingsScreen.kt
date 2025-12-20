@@ -36,7 +36,8 @@ import com.openclassrooms.hexagonal.games.ui.theme.HexagonalGamesTheme
 fun SettingsScreen(
   modifier: Modifier = Modifier,
   viewModel: SettingsViewModel = hiltViewModel(),
-  onBackClick: () -> Unit
+  onBackClick: () -> Unit,
+  onSignOutClick: () -> Unit
 ) {
   Scaffold(
     modifier = modifier,
@@ -63,7 +64,8 @@ fun SettingsScreen(
       onNotificationDisabledClicked = { viewModel.disableNotifications() },
       onNotificationEnabledClicked = {
         viewModel.enableNotifications()
-      }
+      },
+      onSignOutClick = onSignOutClick
     )
   }
 }
@@ -73,7 +75,8 @@ fun SettingsScreen(
 private fun Settings(
   modifier: Modifier = Modifier,
   onNotificationEnabledClicked: () -> Unit,
-  onNotificationDisabledClicked: () -> Unit
+  onNotificationDisabledClicked: () -> Unit,
+  onSignOutClick: () -> Unit
 ) {
   val notificationsPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     rememberPermissionState(
@@ -112,6 +115,11 @@ private fun Settings(
     ) {
       Text(text = stringResource(id = R.string.notification_disable))
     }
+    Button(
+      onClick = { onSignOutClick() }
+    ) {
+      Text(text = "Se déconnecter")
+    }
   }
 }
 
@@ -122,7 +130,8 @@ private fun SettingsPreview() {
   HexagonalGamesTheme {
     Settings(
       onNotificationEnabledClicked = { },
-      onNotificationDisabledClicked = { }
+      onNotificationDisabledClicked = { },
+      onSignOutClick = { }
     )
   }
 }

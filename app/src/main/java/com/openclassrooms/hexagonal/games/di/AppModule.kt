@@ -1,5 +1,6 @@
 package com.openclassrooms.hexagonal.games.di
 
+import com.google.firebase.auth.FirebaseAuth
 import com.openclassrooms.hexagonal.games.data.service.PostApi
 import com.openclassrooms.hexagonal.games.data.service.PostFakeApi
 import dagger.Module
@@ -27,5 +28,18 @@ class AppModule {
   @Singleton
   fun providePostApi(): PostApi {
     return PostFakeApi()
+  }
+
+  /**
+   * Provides a Singleton instance of FirebaseAuth.
+   * This ensures that the same FirebaseAuth instance is used throughout the application
+   * for authentication operations.
+   *
+   * @return A Singleton instance of FirebaseAuth.
+   */
+  @Provides
+  @Singleton
+  fun provideFirebaseAuth(): FirebaseAuth {
+    return FirebaseAuth.getInstance()
   }
 }

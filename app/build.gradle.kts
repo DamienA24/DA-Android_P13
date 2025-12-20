@@ -3,11 +3,13 @@ plugins {
   alias(libs.plugins.kotlin)
   alias(libs.plugins.ksp)
   alias(libs.plugins.hilt)
+  alias(libs.plugins.googleServices)
+  alias(libs.plugins.compose.compiler)
 }
 
 android {
   namespace = "com.openclassrooms.hexagonal.games"
-  compileSdk = 34
+  compileSdk = 36
 
   defaultConfig {
     applicationId = "com.openclassrooms.hexagonal.games"
@@ -26,14 +28,12 @@ android {
     }
   }
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
   }
+
   composeOptions {
     kotlinCompilerExtensionVersion = "1.5.11"
-  }
-  kotlinOptions {
-    jvmTarget = "1.8"
   }
   buildFeatures {
     compose = true
@@ -71,4 +71,12 @@ dependencies {
   testImplementation(libs.junit)
   androidTestImplementation(libs.ext.junit)
   androidTestImplementation(libs.espresso.core)
+
+  implementation(libs.firebase.bom)
+  implementation(libs.firebase.analytics)
+  implementation(libs.firebase.auth)
+  implementation(libs.firebase.ui.auth)
+  implementation(libs.androidx.compose.material.icons.extended)
+
+  implementation(libs.kotlin.metadata.jvm)
 }

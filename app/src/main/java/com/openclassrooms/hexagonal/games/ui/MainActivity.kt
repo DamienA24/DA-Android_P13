@@ -4,12 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.openclassrooms.hexagonal.games.screen.Screen
 import com.openclassrooms.hexagonal.games.screen.ad.AddScreen
+import com.openclassrooms.hexagonal.games.screen.auth.AuthViewModel
+import com.openclassrooms.hexagonal.games.screen.auth.LoginScreen
 import com.openclassrooms.hexagonal.games.screen.homefeed.HomefeedScreen
 import com.openclassrooms.hexagonal.games.screen.settings.SettingsScreen
 import com.openclassrooms.hexagonal.games.ui.theme.HexagonalGamesTheme
@@ -38,10 +42,20 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun HexagonalGamesNavHost(navHostController: NavHostController) {
+  val context = LocalContext.current
   NavHost(
     navController = navHostController,
-    startDestination = Screen.Homefeed.route
+    startDestination = Screen.Login.route
   ) {
+    composable(route = Screen.Login.route) {
+      LoginScreen(
+        onAuthSuccess = {
+          navHostController.navigate(Screen.Homefeed.route) {
+            popUpTo(Screen.Login.route) { inclusive = true }
+          }
+        }
+      )
+    }
     composable(route = Screen.Homefeed.route) {
       HomefeedScreen(
         onPostClick = {
@@ -62,8 +76,16 @@ fun HexagonalGamesNavHost(navHostController: NavHostController) {
       )
     }
     composable(route = Screen.Settings.route) {
+      val authViewModel: AuthViewModel = hiltViewModel()
       SettingsScreen(
-        onBackClick = { navHostController.navigateUp() }
+        onBackClick = { navHostController.navigateUp() },
+        onSignOutClick = {
+          authViewModel.signOut(context)
+          // Navigate to Login and clear the back stack
+          navHostController.navigate(Screen.Login.route) {
+            popUpTo(0) { inclusive = true }
+          }
+        }
       )
     }
   }
