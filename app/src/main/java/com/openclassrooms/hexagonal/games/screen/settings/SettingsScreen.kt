@@ -37,7 +37,8 @@ fun SettingsScreen(
   modifier: Modifier = Modifier,
   viewModel: SettingsViewModel = hiltViewModel(),
   onBackClick: () -> Unit,
-  onSignOutClick: () -> Unit
+  onSignOutClick: () -> Unit,
+  onAccountManagementClick: () -> Unit = {}
 ) {
   Scaffold(
     modifier = modifier,
@@ -65,7 +66,8 @@ fun SettingsScreen(
       onNotificationEnabledClicked = {
         viewModel.enableNotifications()
       },
-      onSignOutClick = onSignOutClick
+      onSignOutClick = onSignOutClick,
+      onAccountManagementClick = onAccountManagementClick
     )
   }
 }
@@ -76,7 +78,8 @@ private fun Settings(
   modifier: Modifier = Modifier,
   onNotificationEnabledClicked: () -> Unit,
   onNotificationDisabledClicked: () -> Unit,
-  onSignOutClick: () -> Unit
+  onSignOutClick: () -> Unit,
+  onAccountManagementClick: () -> Unit
 ) {
   val notificationsPermissionState = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
     rememberPermissionState(
@@ -85,7 +88,7 @@ private fun Settings(
   } else {
     null
   }
-  
+
   Column(
     modifier = Modifier.fillMaxSize(),
     horizontalAlignment = Alignment.CenterHorizontally,
@@ -104,7 +107,7 @@ private fun Settings(
             notificationsPermissionState.launchPermissionRequest()
           }
         }
-        
+
         onNotificationEnabledClicked()
       }
     ) {
@@ -116,9 +119,9 @@ private fun Settings(
       Text(text = stringResource(id = R.string.notification_disable))
     }
     Button(
-      onClick = { onSignOutClick() }
+      onClick = { onAccountManagementClick() }
     ) {
-      Text(text = "Se déconnecter")
+      Text(text = "Gérer mon compte")
     }
   }
 }
@@ -131,7 +134,8 @@ private fun SettingsPreview() {
     Settings(
       onNotificationEnabledClicked = { },
       onNotificationDisabledClicked = { },
-      onSignOutClick = { }
+      onSignOutClick = { },
+      onAccountManagementClick = { }
     )
   }
 }

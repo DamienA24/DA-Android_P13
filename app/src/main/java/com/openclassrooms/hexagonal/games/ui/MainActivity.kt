@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.openclassrooms.hexagonal.games.screen.Screen
+import com.openclassrooms.hexagonal.games.screen.accountmanagement.AccountManagementScreen
 import com.openclassrooms.hexagonal.games.screen.ad.AddScreen
 import com.openclassrooms.hexagonal.games.screen.auth.AuthViewModel
 import com.openclassrooms.hexagonal.games.screen.auth.LoginScreen
@@ -81,6 +82,28 @@ fun HexagonalGamesNavHost(navHostController: NavHostController) {
         onBackClick = { navHostController.navigateUp() },
         onSignOutClick = {
           authViewModel.signOut(context)
+          // Navigate to Login and clear the back stack
+          navHostController.navigate(Screen.Login.route) {
+            popUpTo(0) { inclusive = true }
+          }
+        },
+        onAccountManagementClick = {
+          navHostController.navigate(Screen.AccountManagement.route)
+        }
+      )
+    }
+    composable(route = Screen.AccountManagement.route) {
+      val authViewModel: AuthViewModel = hiltViewModel()
+      AccountManagementScreen(
+        authViewModel = authViewModel,
+        onBackClick = { navHostController.navigateUp() },
+        onSignOutSuccess = {
+          // Navigate to Login and clear the back stack
+          navHostController.navigate(Screen.Login.route) {
+            popUpTo(0) { inclusive = true }
+          }
+        },
+        onDeleteAccountSuccess = {
           // Navigate to Login and clear the back stack
           navHostController.navigate(Screen.Login.route) {
             popUpTo(0) { inclusive = true }

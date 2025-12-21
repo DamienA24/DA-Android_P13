@@ -160,6 +160,36 @@ class AuthViewModel @Inject constructor(
   }
 
   /**
+   * Deletes the current user's account.
+   * This will also sign out the user upon successful deletion.
+   *
+   * @param context The Android context
+   * @param onSuccess Callback invoked when account is successfully deleted
+   * @param onError Callback invoked when an error occurs during deletion
+   */
+  fun deleteAccount(
+    context: Context,
+    onSuccess: () -> Unit = {},
+    onError: (String) -> Unit = {}
+  ) {
+    viewModelScope.launch {
+      AuthUI.getInstance()
+        .delete(context)
+        .addOnCompleteListener { task ->
+          if (task.isSuccessful) {
+            Log.d("AuthViewModel", "User account deleted successfully")
+            onSuccess()
+          } else {
+            val errorMessage = task.exception?.localizedMessage
+              ?: "Une erreur est survenue lors de la suppression du compte"
+            Log.e("AuthViewModel", "Error deleting account: $errorMessage", task.exception)
+            onError(errorMessage)
+          }
+        }
+    }
+  }
+
+  /**
    * Clears the error state.
    */
   fun clearError() {
