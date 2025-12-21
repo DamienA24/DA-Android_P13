@@ -24,7 +24,6 @@ import javax.inject.Inject
  */
 sealed class AuthState {
   data object Initial : AuthState()
-  data object Loading : AuthState()
   data class Authenticated(val user: FirebaseUser) : AuthState()
   data object Unauthenticated : AuthState()
   data class Error(val message: String) : AuthState()
@@ -130,22 +129,16 @@ class AuthViewModel @Inject constructor(
   fun handleSignInResult(result: FirebaseAuthUIAuthenticationResult) {
     when (result.resultCode) {
       android.app.Activity.RESULT_OK -> {
-        // Authentication successful - state will be updated by the AuthStateListener
-        val user = firebaseAuth.currentUser
-        if (user != null) {
-          _authState.value = AuthState.Authenticated(user)
-        }
       }
       else -> {
         val response = result.idpResponse
         if (response == null) {
-          // User cancelled the sign-in flow
           _authState.value = AuthState.Unauthenticated
         } else {
           // Authentication error
           val errorMessage = response.error?.localizedMessage
             ?: "Une erreur est survenue lors de la connexion"
-          Log.d("AuthViewModel", "Authentication error: $errorMessage")
+          Log.e("AuthViewModel", "Authentication error: $errorMessage")
           _authState.value = AuthState.Error(errorMessage)
         }
       }
@@ -154,14 +147,13 @@ class AuthViewModel @Inject constructor(
 
   /**
    * Signs out the current user.
+   * State will be updated automatically by the AuthStateListener.
    */
   fun signOut(context: Context, onComplete: () -> Unit = {}) {
     viewModelScope.launch {
       AuthUI.getInstance()
         .signOut(context)
         .addOnCompleteListener {
-          _authState.value = AuthState.Unauthenticated
-          _currentUser.value = null
           onComplete()
         }
     }

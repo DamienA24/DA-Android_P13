@@ -9,10 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -107,20 +105,12 @@ fun LoginScreen(
           },
           modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp),
-          enabled = authState !is AuthState.Loading
+            .height(56.dp)
         ) {
-          if (authState is AuthState.Loading) {
-            CircularProgressIndicator(
-              modifier = Modifier.size(24.dp),
-              color = MaterialTheme.colorScheme.onPrimary
-            )
-          } else {
-            Text(
-              text = "Se connecter / S'inscrire",
-              style = MaterialTheme.typography.labelLarge
-            )
-          }
+          Text(
+            text = "Se connecter / S'inscrire",
+            style = MaterialTheme.typography.labelLarge
+          )
         }
       }
     }
