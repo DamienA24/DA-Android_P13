@@ -19,6 +19,9 @@ ksp = "2.3.3"
 lifecycleRuntimeCompose = "2.10.0"
 googleServices = "4.4.4"
 kotlinMetadataJvm = "2.3.0"
+glide = "5.0.5"
+firebase-ui-firestore = "10.0.0-beta01"
+firebase-ui-storage = "10.0.0-beta01"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
@@ -48,6 +51,10 @@ navigation-compose = { group = "androidx.navigation", name = "navigation-compose
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 kotlin-metadata-jvm ={ group = "org.jetbrains.kotlin", name = "kotlin-metadata-jvm", version.ref = "kotlinMetadataJvm" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+firebase-ui-firestore = { module = "com.firebaseui:firebase-ui-firestore", version.ref = "firebase-ui-firestore" }
+firebase-ui-storage = { module = "com.firebaseui:firebase-ui-storage", version.ref = "firebase-ui-storage" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

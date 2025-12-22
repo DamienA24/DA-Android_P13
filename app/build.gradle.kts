@@ -76,6 +76,12 @@ dependencies {
   implementation(libs.firebase.analytics)
   implementation(libs.firebase.auth)
   implementation(libs.firebase.ui.auth)
+  implementation(libs.firebase.messaging)
+  implementation(libs.firebase.ui.firestore)
+  implementation(libs.firebase.ui.storage)
+
+  implementation(libs.glide)
+
   implementation(libs.androidx.compose.material.icons.extended)
 
   implementation(libs.kotlin.metadata.jvm)
