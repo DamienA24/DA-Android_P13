@@ -19,6 +19,7 @@ ksp = "2.3.3"
 lifecycleRuntimeCompose = "2.10.0"
 googleServices = "4.4.4"
 kotlinMetadataJvm = "2.3.0"
+datastorePreferences = "1.1.1"
 glide = "5.0.5"
 firebase-ui-firestore = "10.0.0-beta01"
 firebase-ui-storage = "10.0.0-beta01"
@@ -28,6 +29,8 @@ accompanist-permissions = { module = "com.google.accompanist:accompanist-permiss
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
+firebase-firestore = { module = "com.google.firebase:firebase-firestore" }
+firebase-storage = { module = "com.google.firebase:firebase-storage" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-ui-auth = { module = "com.firebaseui:firebase-ui-auth", version.ref = "firebaseUiAuth" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
@@ -50,6 +53,7 @@ activity-compose = { group = "androidx.activity", name = "activity-compose", ver
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycleRuntimeCompose" }
 androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastorePreferences" }
 kotlin-metadata-jvm ={ group = "org.jetbrains.kotlin", name = "kotlin-metadata-jvm", version.ref = "kotlinMetadataJvm" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }

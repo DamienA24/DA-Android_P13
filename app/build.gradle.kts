@@ -67,16 +67,19 @@ dependencies {
   
   implementation(libs.coil.compose)
   implementation(libs.accompanist.permissions)
+  implementation(libs.datastore.preferences)
 
   testImplementation(libs.junit)
   androidTestImplementation(libs.ext.junit)
   androidTestImplementation(libs.espresso.core)
 
-  implementation(libs.firebase.bom)
+  implementation(platform(libs.firebase.bom))
   implementation(libs.firebase.analytics)
   implementation(libs.firebase.auth)
   implementation(libs.firebase.ui.auth)
   implementation(libs.firebase.messaging)
+  implementation(libs.firebase.firestore)
+  implementation(libs.firebase.storage)
   implementation(libs.firebase.ui.firestore)
   implementation(libs.firebase.ui.storage)
 
