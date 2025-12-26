@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.openclassrooms.hexagonal.games.data.service.PostApi
-import com.openclassrooms.hexagonal.games.data.service.PostFakeApi
+import com.openclassrooms.hexagonal.games.data.service.PostFirestoreApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,16 +20,16 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class AppModule {
   /**
-   * Provides a Singleton instance of PostApi using a PostFakeApi implementation for testing purposes.
-   * This means that whenever a dependency on PostApi is requested, the same instance of PostFakeApi will be used
-   * throughout the application, ensuring consistent data for testing scenarios.
+   * Provides a Singleton instance of PostApi using a PostFirestoreApi implementation.
+   * This implementation uses Firebase Firestore to fetch and persist posts in real-time.
    *
-   * @return A Singleton instance of PostFakeApi.
+   * @param firestore The FirebaseFirestore instance to be used by PostFirestoreApi.
+   * @return A Singleton instance of PostFirestoreApi.
    */
   @Provides
   @Singleton
-  fun providePostApi(): PostApi {
-    return PostFakeApi()
+  fun providePostApi(firestore: FirebaseFirestore): PostApi {
+    return PostFirestoreApi(firestore)
   }
 
   /**
