@@ -1,7 +1,9 @@
 package com.openclassrooms.hexagonal.games.screen.ad
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.openclassrooms.hexagonal.games.data.repository.FirebasePostRepository
 import com.openclassrooms.hexagonal.games.data.repository.PostRepository
 import com.openclassrooms.hexagonal.games.domain.model.Post
 import com.openclassrooms.hexagonal.games.domain.model.User
@@ -9,17 +11,22 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import java.util.UUID
 import javax.inject.Inject
 
 /**
  * This ViewModel manages data and interactions related to adding new posts in the AddScreen.
- * It utilizes dependency injection to retrieve a PostRepository instance for interacting with post data.
+ * It utilizes dependency injection to retrieve repository instances for interacting with post data.
  */
 @HiltViewModel
-class AddViewModel @Inject constructor(private val postRepository: PostRepository) : ViewModel() {
+class AddViewModel @Inject constructor(
+  private val postRepository: PostRepository,
+  private val firebasePostRepository: FirebasePostRepository
+) : ViewModel() {
   
   /**
    * Internal mutable state flow representing the current post being edited.
@@ -41,7 +48,37 @@ class AddViewModel @Inject constructor(private val postRepository: PostRepositor
    */
   val post: StateFlow<Post>
     get() = _post
-  
+
+  /**
+   * Internal mutable state flow representing the selected media URI.
+   */
+  private val _selectedMediaUri = MutableStateFlow<Uri?>(null)
+
+  /**
+   * Public state flow representing the selected media URI.
+   */
+  val selectedMediaUri: StateFlow<Uri?> = _selectedMediaUri.asStateFlow()
+
+  /**
+   * Internal mutable state flow representing the loading state during post upload.
+   */
+  private val _isLoading = MutableStateFlow(false)
+
+  /**
+   * Public state flow representing the loading state.
+   */
+  val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+  /**
+   * Internal mutable state flow representing upload errors.
+   */
+  private val _uploadError = MutableStateFlow<String?>(null)
+
+  /**
+   * Public state flow representing upload errors.
+   */
+  val uploadError: StateFlow<String?> = _uploadError.asStateFlow()
+
   /**
    * StateFlow derived from the post that emits a FormError if the title is empty, null otherwise.
    */
@@ -54,7 +91,7 @@ class AddViewModel @Inject constructor(private val postRepository: PostRepositor
   )
   
   /**
-   * Handles form events like title and description changes.
+   * Handles form events like title, description, and media selection changes.
    *
    * @param formEvent The form event to be processed.
    */
@@ -65,27 +102,56 @@ class AddViewModel @Inject constructor(private val postRepository: PostRepositor
           description = formEvent.description
         )
       }
-      
+
       is FormEvent.TitleChanged -> {
         _post.value = _post.value.copy(
           title = formEvent.title
         )
       }
+
+      is FormEvent.MediaSelected -> {
+        _selectedMediaUri.value = formEvent.uri
+      }
     }
   }
   
   /**
-   * Attempts to add the current post to the repository after setting the author.
+   * Attempts to add the current post to Firebase Storage and Firestore.
+   * Uploads the selected media (if any) and saves the post data with the download URL.
    *
-   * TODO: Implement logic to retrieve the current user.
+   * @param onSuccess Callback invoked when the post is successfully uploaded.
+   * @param onError Callback invoked when an error occurs during upload.
    */
-  fun addPost() {
-    //TODO : retrieve the current user
-    postRepository.addPost(
-      _post.value.copy(
-        author = User("1", "Gerry", "Ariella")
-      )
-    )
+  fun addPost(onSuccess: () -> Unit = {}, onError: (String) -> Unit = {}) {
+    viewModelScope.launch {
+      _isLoading.value = true
+      _uploadError.value = null
+
+      try {
+        val result = firebasePostRepository.uploadPostWithMedia(
+          post = _post.value,
+          mediaUri = _selectedMediaUri.value
+        )
+
+        result.fold(
+          onSuccess = {
+            _isLoading.value = false
+            onSuccess()
+          },
+          onFailure = { exception ->
+            _isLoading.value = false
+            val errorMessage = exception.message ?: "Unknown error occurred"
+            _uploadError.value = errorMessage
+            onError(errorMessage)
+          }
+        )
+      } catch (e: Exception) {
+        _isLoading.value = false
+        val errorMessage = e.message ?: "Unknown error occurred"
+        _uploadError.value = errorMessage
+        onError(errorMessage)
+      }
+    }
   }
   
   /**

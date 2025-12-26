@@ -14,4 +14,7 @@
   <string name="contentDescription_more">More</string>
   <string name="contentDescription_notification_icon">Icone de notification</string>
   <string name="error_title">Title not valid</string>
+  <string name="select_media">Select media</string>
+  <string name="change_media">Change media</string>
+  <string name="selected_media">Selected media</string>
 </resources>

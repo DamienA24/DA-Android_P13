@@ -1,6 +1,8 @@
 package com.openclassrooms.hexagonal.games.di
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.openclassrooms.hexagonal.games.data.service.PostApi
 import com.openclassrooms.hexagonal.games.data.service.PostFakeApi
 import dagger.Module
@@ -41,5 +43,31 @@ class AppModule {
   @Singleton
   fun provideFirebaseAuth(): FirebaseAuth {
     return FirebaseAuth.getInstance()
+  }
+
+  /**
+   * Provides a Singleton instance of FirebaseFirestore.
+   * This ensures that the same Firestore instance is used throughout the application
+   * for database operations.
+   *
+   * @return A Singleton instance of FirebaseFirestore.
+   */
+  @Provides
+  @Singleton
+  fun provideFirebaseFirestore(): FirebaseFirestore {
+    return FirebaseFirestore.getInstance()
+  }
+
+  /**
+   * Provides a Singleton instance of FirebaseStorage.
+   * This ensures that the same Storage instance is used throughout the application
+   * for file storage operations.
+   *
+   * @return A Singleton instance of FirebaseStorage.
+   */
+  @Provides
+  @Singleton
+  fun provideFirebaseStorage(): FirebaseStorage {
+    return FirebaseStorage.getInstance()
   }
 }
