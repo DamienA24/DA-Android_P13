@@ -17,4 +17,10 @@
   <string name="select_media">Select media</string>
   <string name="change_media">Change media</string>
   <string name="selected_media">Selected media</string>
+  <string name="post_detail_title">Post Details</string>
+  <string name="contentDescription_back">Back</string>
+  <string name="comments_section_title">Comments (%1$d)</string>
+  <string name="no_comments_yet">No comments yet</string>
+  <string name="hint_add_comment">Add a comment…</string>
+  <string name="contentDescription_send_comment">Send comment</string>
 </resources>

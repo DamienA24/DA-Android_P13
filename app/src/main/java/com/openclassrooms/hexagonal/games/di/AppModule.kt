@@ -3,6 +3,8 @@ package com.openclassrooms.hexagonal.games.di
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.openclassrooms.hexagonal.games.data.service.CommentApi
+import com.openclassrooms.hexagonal.games.data.service.CommentFirestoreApi
 import com.openclassrooms.hexagonal.games.data.service.PostApi
 import com.openclassrooms.hexagonal.games.data.service.PostFirestoreApi
 import dagger.Module
@@ -69,5 +71,18 @@ class AppModule {
   @Singleton
   fun provideFirebaseStorage(): FirebaseStorage {
     return FirebaseStorage.getInstance()
+  }
+
+  /**
+   * Provides a Singleton instance of CommentApi using a CommentFirestoreApi implementation.
+   * This implementation uses Firebase Firestore to fetch and persist comments in real-time.
+   *
+   * @param firestore The FirebaseFirestore instance to be used by CommentFirestoreApi.
+   * @return A Singleton instance of CommentFirestoreApi.
+   */
+  @Provides
+  @Singleton
+  fun provideCommentApi(firestore: FirebaseFirestore): CommentApi {
+    return CommentFirestoreApi(firestore)
   }
 }
