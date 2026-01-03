@@ -70,6 +70,10 @@ dependencies {
   implementation(libs.datastore.preferences)
 
   testImplementation(libs.junit)
+  testImplementation(libs.mockk)
+  testImplementation(libs.kotlinx.coroutines.test)
+  testImplementation(libs.turbine)
+  testImplementation(libs.arch.core.testing)
   androidTestImplementation(libs.ext.junit)
   androidTestImplementation(libs.espresso.core)
 
